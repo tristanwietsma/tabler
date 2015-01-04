@@ -23,7 +23,10 @@ type Column struct {
 func (c *Column) Init(name, tag string) error {
 	(*c).Name = name
 
-	attributes := strings.Split(tag, ",")
+	attributes := strings.Split(
+		strings.Trim(tag, "`"),
+		",",
+	)
 	for _, attr := range attributes {
 		pair := strings.Split(attr, ":")
 		if len(pair) != 2 {
@@ -160,10 +163,11 @@ func (i *InputFile) Init(path string) error {
 			col := Column{}
 			if err := col.Init(field.Names[0].Name, field.Tag.Value); err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal tag '%s' from table '%s' in '%s'",
+					"Unable to parse tag '%s' from table '%s' in '%s': %v",
 					field.Tag.Value,
 					table.Name,
 					path,
+					err,
 				)
 			}
 			table.Columns = append(table.Columns, col)
