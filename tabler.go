@@ -14,14 +14,19 @@ import (
 
 // Column is a column in an SQL table.
 type Column struct {
-	Name      string
-	Type      string
-	IsPrimary bool
+	Name       string
+	Type       string
+	IsPrimary  bool
+	ForeignKey string
 }
 
 // Init sets the columns fields.
 func (c *Column) Init(name, tag string) error {
 	(*c).Name = strings.ToLower(name)
+
+	if len((*c).Name) > 2 && (*c).Name[len((*c).Name)-2:] == "id" {
+		(*c).ForeignKey = fmt.Sprintf("references %s(id)", (*c).Name[:len((*c).Name)-2])
+	}
 
 	attributes := strings.Split(
 		strings.Trim(tag, "`"),
