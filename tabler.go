@@ -21,7 +21,7 @@ type Column struct {
 
 // Init sets the columns fields.
 func (c *Column) Init(name, tag string) error {
-	(*c).Name = name
+	(*c).Name = strings.ToLower(name)
 
 	attributes := strings.Split(
 		strings.Trim(tag, "`"),
@@ -148,7 +148,7 @@ func (i *InputFile) Init(path string) error {
 				if ts.Name == nil {
 					continue
 				}
-				table.Name = ts.Name.Name
+				table.Name = strings.ToLower(ts.Name.Name)
 				break
 			}
 		}
@@ -181,7 +181,7 @@ func (i *InputFile) Init(path string) error {
 }
 
 func (i InputFile) Write() error {
-	// to do
+	fmt.Println(i)
 	return nil
 }
 
