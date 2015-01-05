@@ -6,6 +6,7 @@ import (
 	"go/ast"
 	"go/parser"
 	"go/token"
+	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -243,8 +244,7 @@ package {{.PackageName}}
 {{end}}`)
 	tmpl.Execute(&buf, i)
 
-	fmt.Println(buf.String())
-	return nil
+	return ioutil.WriteFile(i.BuildTarget, buf.Bytes(), 0644)
 }
 
 func main() {
