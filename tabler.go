@@ -111,7 +111,7 @@ func (t Table) DropTable() string {
 func (t Table) InsertRow() string {
 	buf := bytes.Buffer{}
 	tmpl := newTmpl(`func ({{caller .Name}} {{.Name}}) InsertRow() string {
-    return ` + "`" + `INSERT INTO {{lower .Name}} ({{$n := len .Columns}}{{range $i, $c := .Columns}}{{$c.Name}}{{if lt (plus1 $i) $n}}, {{end}}{{end}}) VALUES ({{range $i, $c := .Columns}}?{{if lt (plus1 $i) $n}}, {{end}}{{end}});` + "`" + `
+    return ` + "`" + `INSERT INTO {{lower .Name}} ({{$n := len .Columns}}{{range $i, $c := .Columns}}{{lower $c.Name}}{{if lt (plus1 $i) $n}}, {{end}}{{end}}) VALUES ({{range $i, $c := .Columns}}?{{if lt (plus1 $i) $n}}, {{end}}{{end}});` + "`" + `
 }`)
 	tmpl.Execute(&buf, t)
 	return buf.String()

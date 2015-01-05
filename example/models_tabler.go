@@ -12,7 +12,7 @@ func (u User) DropTable() string {
 }
 
 func (u User) InsertRow() string {
-    return `INSERT INTO user (ID, Email, Created) VALUES (?, ?, ?);`
+    return `INSERT INTO user (id, email, created) VALUES (?, ?, ?);`
 }
 
 func (u User) SelectRow() string {
@@ -30,7 +30,7 @@ func (p Profile) DropTable() string {
 }
 
 func (p Profile) InsertRow() string {
-    return `INSERT INTO profile (UserID, Attribute, Value) VALUES (?, ?, ?);`
+    return `INSERT INTO profile (userid, attribute, value) VALUES (?, ?, ?);`
 }
 
 func (p Profile) SelectRow() string {
