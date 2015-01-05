@@ -1,3 +1,5 @@
+**If you see opportunities for improvement (features, simplication, clarity), please submit an issue (or a pull request). Already high on the queue: I will be revising the tag format to make it more canonical and reflect-compliant. Thanks!**
+
 # tabler
 
 Go generate syntactic sugar for SQL-backed structs
