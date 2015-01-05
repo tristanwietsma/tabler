@@ -61,7 +61,9 @@ func (c *Column) Init(name, tag string) error {
 		case "type":
 			(*c).Type = pair[1]
 		case "primary":
-			(*c).IsPrimary = true
+			if pair[1] == "true" {
+				(*c).IsPrimary = true
+			}
 
 		default:
 			return fmt.Errorf("Unknown attribute: '%s'", pair[0])
