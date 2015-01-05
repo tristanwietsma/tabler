@@ -37,6 +37,13 @@ type User struct {
 }
 ```
 
+Run `generate` and tabler will produce `*_tabler.go` files for those files containing decorated structs.
+
+```bash
+go generate
+go build
+```
+
 ## Tags
 
 ### Requirements
