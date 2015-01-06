@@ -21,7 +21,7 @@ var (
 		"lower":  func(s string) string { return strings.ToLower(s) },
 		"caller": func(s string) string { return strings.ToLower(s)[0:1] },
 	}
-	tagPattern = regexp.MustCompile(`tabler:"([0-9a-zA-Z=&]*)"`)
+	tagPattern = regexp.MustCompile(`tabler:"([0-9a-zA-Z=&\(\)]*)"`)
 )
 
 func newTmpl(s string) *template.Template {
