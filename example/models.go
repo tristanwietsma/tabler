@@ -7,15 +7,15 @@ import "time"
 // User stores user account information.
 // @table
 type User struct {
-	ID      string    `type:uuid,primary:true`
-	Email   string    `type:varchar(128)`
-	Created time.Time `type:timestamp`
+	ID      string    `tabler:"columnType=uuid&primary=true"`
+	Email   string    `tabler:"columnType=varchar(128)"`
+	Created time.Time `tabler:"columnType=timestamp"`
 }
 
 // Profile stores user attributes.
 // @table
 type Profile struct {
-	UserID    string `type:uuid,primary:true`
-	Attribute string `type:varchar(64),primary:true`
-	Value     string `type:varchar(256)`
+	UserID    string `tabler:"columnType=uuid&primary=true"`
+	Attribute string `tabler:"columnType=varchar(64)&primary=true"`
+	Value     string `tabler:"columnType=varchar(256)"`
 }

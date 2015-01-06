@@ -10,6 +10,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"text/template"
 )
@@ -20,6 +21,7 @@ var (
 		"lower":  func(s string) string { return strings.ToLower(s) },
 		"caller": func(s string) string { return strings.ToLower(s)[0:1] },
 	}
+	tagPattern = regexp.MustCompile(`tabler:"([0-9a-zA-Z=&\(\)]*)"`)
 )
 
 func newTmpl(s string) *template.Template {
@@ -47,24 +49,20 @@ func (c *Column) Init(name, tag string) error {
 	}
 
 	// parse attributes
-	attributes := strings.Split(
-		strings.Trim(tag, "`"),
-		",",
-	)
+	attributes := strings.Split(tag, "&")
 	for _, attr := range attributes {
-		pair := strings.Split(attr, ":")
+		pair := strings.Split(attr, "=")
 		if len(pair) != 2 {
 			return fmt.Errorf("Malformed tag: '%s'", attr)
 		}
 
 		switch strings.ToLower(pair[0]) {
-		case "type":
+		case "columntype":
 			(*c).Type = pair[1]
 		case "primary":
 			if pair[1] == "true" {
 				(*c).IsPrimary = true
 			}
-
 		default:
 			return fmt.Errorf("Unknown attribute: '%s'", pair[0])
 		}
@@ -201,26 +199,30 @@ func (i *InputFile) Init(path string) error {
 			return fmt.Errorf("Unable to extract name from a table struct.")
 		}
 
-		// parse tags and build columns
+		// parse the tabler tag and build columns
 		sdecl := tdecl.Specs[0].(*ast.TypeSpec).Type.(*ast.StructType)
 		fields := sdecl.Fields.List
 		for _, field := range fields {
-			col := Column{}
-			if err := col.Init(field.Names[0].Name, field.Tag.Value); err != nil {
-				return fmt.Errorf(
-					"Unable to parse tag '%s' from table '%s' in '%s': %v",
-					field.Tag.Value,
-					table.Name,
-					path,
-					err,
-				)
-			}
-			table.Columns = append(table.Columns, col)
-			if col.IsPrimary {
-				table.PrimaryKeys = append(table.PrimaryKeys, col)
+
+			match := tagPattern.FindStringSubmatch(field.Tag.Value)
+			if len(match) == 2 {
+
+				col := Column{}
+				if err := col.Init(field.Names[0].Name, match[1]); err != nil {
+					return fmt.Errorf(
+						"Unable to parse tag '%s' from table '%s' in '%s': %v",
+						match[1],
+						table.Name,
+						path,
+						err,
+					)
+				}
+				table.Columns = append(table.Columns, col)
+				if col.IsPrimary {
+					table.PrimaryKeys = append(table.PrimaryKeys, col)
+				}
 			}
 		}
-
 		if len(table.Columns) > 0 && len(table.PrimaryKeys) > 0 {
 			(*i).Tables = append((*i).Tables, table)
 		}
