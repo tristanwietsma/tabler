@@ -204,6 +204,10 @@ func (i *InputFile) Init(path string) error {
 		fields := sdecl.Fields.List
 		for _, field := range fields {
 
+			if field.Tag == nil {
+				continue
+			}
+
 			match := tagPattern.FindStringSubmatch(field.Tag.Value)
 			if len(match) == 2 {
 

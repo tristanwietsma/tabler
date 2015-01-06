@@ -26,7 +26,7 @@ Add the `go:generate` directive to files with SQL-backed structs.
 //go:generate tabler $GOFILE
 ```
 
-Add the `@table` decorator to the comment block for all target structs. Tag each field with the data type and label the primary keys.
+Add the `@table` decorator to the comment block for all target structs. Tag each field with the data type (`columnType`) and label the primary keys.
 
 ```go
 // @table
@@ -48,8 +48,9 @@ go build
 
 ### Requirements
 
-- Every field must be tagged.
-- `type` is required for every field.
+- Every field must have a `tabler` key in the tag in order to be included as a column.
+- Struct fields without a `tabler` key will be ignored.
+- A `columnType` attribute is required for every field.
 - Every table must have at least one primary key.
 
 ### Conventions
