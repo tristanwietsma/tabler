@@ -4,7 +4,7 @@ package models
 // User
 
 func (u User) CreateTable() string {
-    return `CREATE TABLE user (id uuid, email varchar(128), created timestamp) PRIMARY KEY (id);`
+    return `CREATE TABLE user (id uuid, created timestamp) PRIMARY KEY (id);`
 }
 
 func (u User) DropTable() string {
@@ -12,17 +12,17 @@ func (u User) DropTable() string {
 }
 
 func (u User) InsertRow() string {
-    return `INSERT INTO user (id, email, created) VALUES (?, ?, ?);`
+    return `INSERT INTO user (id, created) VALUES (?, ?);`
 }
 
 func (u User) SelectRow() string {
-    return `SELECT id, email, created FROM user WHERE id=?;`
+    return `SELECT id, created FROM user WHERE id=?;`
 }
 
 // Profile
 
 func (p Profile) CreateTable() string {
-    return `CREATE TABLE profile (userid uuid REFERENCES user(id), attribute varchar(64), value varchar(256)) PRIMARY KEY (userid, attribute);`
+    return `CREATE TABLE profile (userid uuid REFERENCES user(id)) PRIMARY KEY (userid);`
 }
 
 func (p Profile) DropTable() string {
@@ -30,9 +30,9 @@ func (p Profile) DropTable() string {
 }
 
 func (p Profile) InsertRow() string {
-    return `INSERT INTO profile (userid, attribute, value) VALUES (?, ?, ?);`
+    return `INSERT INTO profile (userid) VALUES (?);`
 }
 
 func (p Profile) SelectRow() string {
-    return `SELECT userid, attribute, value FROM profile WHERE userid=? AND attribute=?;`
+    return `SELECT userid FROM profile WHERE userid=?;`
 }
