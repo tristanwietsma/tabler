@@ -21,7 +21,7 @@ var (
 		"lower":  func(s string) string { return strings.ToLower(s) },
 		"caller": func(s string) string { return strings.ToLower(s)[0:1] },
 	}
-	tablerPattern = regexp.MustCompile(`tabler:"([0-9a-zA-Z=&]*)"`)
+	tagPattern = regexp.MustCompile(`tabler:"([0-9a-zA-Z=&]*)"`)
 )
 
 func newTmpl(s string) *template.Template {
@@ -204,7 +204,7 @@ func (i *InputFile) Init(path string) error {
 		fields := sdecl.Fields.List
 		for _, field := range fields {
 
-			match := tablerPattern.FindStringSubmatch(field.Tag.Value)
+			match := tagPattern.FindStringSubmatch(field.Tag.Value)
 			if len(match) == 2 {
 
 				col := Column{}

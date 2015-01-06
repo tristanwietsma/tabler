@@ -1,5 +1,3 @@
-**If you see opportunities for improvement (features, simplification, clarity), please submit an issue (or a pull request). Already high on the queue: I will be revising the tag format to make it more canonical and reflect-compliant. Thanks!**
-
 # tabler
 
 Go generate syntactic sugar for SQL-backed structs
@@ -33,9 +31,9 @@ Add the `@table` decorator to the comment block for all target structs. Tag each
 ```go
 // @table
 type User struct {
-    ID      string    `type:uuid,primary:true`
-    Email   string    `type:varchar(128)`
-    Created time.Time `type:timestamp`
+    ID      string    `tabler:"columnType=uuid&primary=true"`
+    Email   string    `tabler:"columnType=varchar(128)"`
+    Created time.Time `tabler:"columnType=timestamp"`
 }
 ```
 
@@ -61,9 +59,9 @@ Fields matching the pattern `<something>ID` are assumed to be foreign keys. For 
 ```go
 // @table
 type Profile struct {
-    UserID    string `type:uuid,primary:true`
-    Attribute string `type:varchar(64),primary:true`
-    Value     string `type:varchar(256)`
+    UserID    string `tabler:"columnType=uuid&primary=true"`
+    Attribute string `tabler:"columnType=varchar(64)&primary=true"`
+    Value     string `tabler:"columnType=varchar(256)"`
 }
 ```
 
