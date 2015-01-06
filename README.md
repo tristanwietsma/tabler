@@ -53,7 +53,7 @@ go build
 - A `columnType` attribute is required for every field.
 - Every table must have at least one primary key.
 
-### Conventions
+### Foreign Key Convention
 
 Fields matching the pattern `<something>ID` are assumed to be foreign keys. For example:
 
