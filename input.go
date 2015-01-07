@@ -98,7 +98,7 @@ func (i *InputFile) Init(path string) error {
 			if len(match) == 2 {
 
 				col := Column{}
-				if err := col.Init(field.Names[0].Name, match[1]); err != nil {
+				if err := col.init(field.Names[0].Name, match[1]); err != nil {
 					return fmt.Errorf(
 						"Unable to parse tag '%s' from table '%s' in '%s': %v",
 						match[1],

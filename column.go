@@ -30,8 +30,7 @@ type Column struct {
 	ForeignKey string
 }
 
-// Init sets the columns fields.
-func (c *Column) Init(name, tag string) error {
+func (c *Column) init(name, tag string) error {
 	c.Name = name
 	attrMap := parseAttr(tag)
 
