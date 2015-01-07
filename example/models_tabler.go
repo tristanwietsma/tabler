@@ -3,12 +3,14 @@ package models
 
 // User
 
-func (u User) CreateTable() string {
-    return `CREATE TABLE user (id uuid, email varchar(128), created timestamp) PRIMARY KEY (id);`
+func (u User) CreateTable() error {
+    _, err := u.db.Exec(`CREATE TABLE user (id uuid, email varchar(128), created timestamp) PRIMARY KEY (id);`)
+    return err
 }
 
-func (u User) DropTable() string {
-    return `DROP TABLE user;`
+func (u User) DropTable() error {
+    _, err := u.db.Exec(`DROP TABLE user;`)
+    return err
 }
 
 func (u User) InsertRow() string {
