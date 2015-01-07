@@ -7,6 +7,10 @@ import (
 	"strings"
 )
 
+var (
+	foreignKeyPattern = regexp.MustCompile("([A-Za-z][A-Za-z0-9]*)ID")
+)
+
 func parseAttr(attr string) map[string]string {
 	attrMap := make(map[string]string)
 	chunks := strings.Split(attr, "&")
@@ -44,8 +48,7 @@ func (c *Column) Init(name, tag string) error {
 	}
 
 	// foreign key
-	pattern := regexp.MustCompile("([A-Za-z][A-Za-z0-9]*)ID")
-	match := pattern.FindStringSubmatch(name)
+	match := foreignKeyPattern.FindStringSubmatch(name)
 	if len(match) > 0 {
 		c.IsForeign = true
 		c.ForeignKey = fmt.Sprintf("REFERENCES %s(id)", strings.ToLower(match[1]))
