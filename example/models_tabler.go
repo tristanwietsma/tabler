@@ -13,8 +13,8 @@ func (u User) DropTable() error {
     return err
 }
 
-func (u User) InsertRow() string {
-    return `INSERT INTO user (id, email, created) VALUES (?, ?, ?);`
+func (u User) InsertRow(id string, email string, created time.Time) error {
+            _, err := u.db.Exec(`INSERT INTO user (id, email, created) VALUES (?, ?, ?);`, id, email, created)
 }
 
 func (u User) SelectRow() string {
