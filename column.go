@@ -3,8 +3,19 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"regexp"
 	"strings"
 )
+
+func parseAttr(attr string) map[string]string {
+	attrMap := make(map[string]string)
+	chunks := strings.Split(attr, "&")
+	for _, chunk := range chunks {
+		pair := strings.Split(chunk, "=")
+		attrMap[pair[0]] = pair[1]
+	}
+	return attrMap
+}
 
 // Column is a column in an SQL table.
 type Column struct {
@@ -17,33 +28,27 @@ type Column struct {
 
 // Init sets the columns fields.
 func (c *Column) Init(name, tag string) error {
-	(*c).Name = name
+	c.Name = name
+	attrMap := parseAttr(tag)
 
-	// auto-detect foreign key
-	if len(name) > 2 && name[len(name)-2:] == "ID" {
-		(*c).IsForeign = true
-		tbl := strings.ToLower((*c).Name[:len((*c).Name)-2])
-		(*c).ForeignKey = fmt.Sprintf("REFERENCES %s(id)", tbl)
+	// columnType
+	if dtype, ok := attrMap["columnType"]; ok {
+		c.Type = dtype
+	} else {
+		return fmt.Errorf("Missing columnType!")
 	}
 
-	// parse attributes
-	attributes := strings.Split(tag, "&")
-	for _, attr := range attributes {
-		pair := strings.Split(attr, "=")
-		if len(pair) != 2 {
-			return fmt.Errorf("Malformed tag: '%s'", attr)
-		}
+	// primary key
+	if isP, ok := attrMap["primary"]; ok && isP == "true" {
+		c.IsPrimary = true
+	}
 
-		switch strings.ToLower(pair[0]) {
-		case "columntype":
-			(*c).Type = pair[1]
-		case "primary":
-			if pair[1] == "true" {
-				(*c).IsPrimary = true
-			}
-		default:
-			return fmt.Errorf("Unknown attribute: '%s'", pair[0])
-		}
+	// foreign key
+	pattern := regexp.MustCompile("([A-Za-z][A-Za-z0-9]*)ID")
+	match := pattern.FindStringSubmatch(name)
+	if len(match) > 0 {
+		c.IsForeign = true
+		c.ForeignKey = fmt.Sprintf("REFERENCES %s(id)", strings.ToLower(match[1]))
 	}
 
 	return nil
