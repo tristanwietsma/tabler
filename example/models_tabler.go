@@ -36,3 +36,21 @@ func (p Profile) InsertRow() string {
 func (p Profile) SelectRow() string {
     return `SELECT userid, attribute, value FROM profile WHERE userid=? AND attribute=?;`
 }
+
+// NoPrimary
+
+func (n NoPrimary) CreateTable() string {
+    return `CREATE TABLE noprimary (attribute varchar(64), value varchar(256));`
+}
+
+func (n NoPrimary) DropTable() string {
+    return `DROP TABLE noprimary;`
+}
+
+func (n NoPrimary) InsertRow() string {
+    return `INSERT INTO noprimary (attribute, value) VALUES (?, ?);`
+}
+
+func (n NoPrimary) SelectRow() string {
+    return `SELECT attribute, value FROM noprimary WHERE ;`
+}

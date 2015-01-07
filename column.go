@@ -24,14 +24,16 @@ func parseAttr(attr string) map[string]string {
 // Column is a column in an SQL table.
 type Column struct {
 	Name       string
+	FType      string
 	Type       string
 	IsPrimary  bool
 	IsForeign  bool
 	ForeignKey string
 }
 
-func (c *Column) init(name, tag string) error {
+func (c *Column) init(name, ftype, tag string) error {
 	c.Name = name
+	c.FType = ftype
 	attrMap := parseAttr(tag)
 
 	// columnType

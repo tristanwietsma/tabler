@@ -11,6 +11,12 @@ import (
 	"strings"
 )
 
+func printableType(t string) string {
+	t = strings.TrimPrefix(t, "&{")
+	t = strings.TrimSuffix(t, "}")
+	return strings.Replace(t, " ", ".", -1)
+}
+
 // InputFile is a go file with tables.
 type InputFile struct {
 	PackageName string
@@ -87,33 +93,40 @@ func (i *InputFile) Init(path string) error {
 
 		// parse the tabler tag and build columns
 		sdecl := tdecl.Specs[0].(*ast.TypeSpec).Type.(*ast.StructType)
-		fields := sdecl.Fields.List
-		for _, field := range fields {
+		for _, field := range sdecl.Fields.List {
 
-			if field.Tag == nil {
-				continue
+			// get the printable type for each field
+			var ftype string
+			if starx, ok := field.Type.(*ast.StarExpr); ok {
+				ftype = "*" + printableType(fmt.Sprintf("%v", starx.X))
+			} else {
+				ftype = printableType(fmt.Sprintf("%v", field.Type))
 			}
 
-			match := tagPattern.FindStringSubmatch(field.Tag.Value)
-			if len(match) == 2 {
+			// check for a database reference
+			if ftype == "*sql.DB" {
+				table.HasConn = true
+				table.Conn = field.Names[0].Name
+			}
 
-				col := Column{}
-				if err := col.init(field.Names[0].Name, match[1]); err != nil {
-					return fmt.Errorf(
-						"Unable to parse tag '%s' from table '%s' in '%s': %v",
-						match[1],
-						table.Name,
-						path,
-						err,
-					)
-				}
-				table.Columns = append(table.Columns, col)
-				if col.IsPrimary {
-					table.PrimaryKeys = append(table.PrimaryKeys, col)
+			// check for tabler tag
+			if field.Tag != nil {
+				match := tagPattern.FindStringSubmatch(field.Tag.Value)
+				if len(match) == 2 {
+					col := Column{}
+					if err := col.init(field.Names[0].Name, ftype, match[1]); err != nil {
+						return fmt.Errorf("Unable to parse tag '%s': %v", match[1], err)
+					}
+					table.Columns = append(table.Columns, col)
+					if col.IsPrimary {
+						table.PrimaryKeys = append(table.PrimaryKeys, col)
+					}
 				}
 			}
 		}
-		if len(table.Columns) > 0 && len(table.PrimaryKeys) > 0 {
+
+		// add the table if it has columns
+		if len(table.Columns) > 0 {
 			(*i).Tables = append((*i).Tables, table)
 		}
 	}
