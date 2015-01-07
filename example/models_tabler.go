@@ -14,7 +14,8 @@ func (u User) DropTable() error {
 }
 
 func (u User) InsertRow(id string, email string, created time.Time) error {
-            _, err := u.db.Exec(`INSERT INTO user (id, email, created) VALUES (?, ?, ?);`, id, email, created)
+    _, err := u.db.Exec(`INSERT INTO user (id, email, created) VALUES (?, ?, ?);`, id, email, created)
+    return err
 }
 
 func (u User) SelectRow() string {
