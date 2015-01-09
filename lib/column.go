@@ -3,12 +3,7 @@ package lib
 import (
 	"bytes"
 	"fmt"
-	"regexp"
 	"strings"
-)
-
-var (
-	foreignKeyPattern = regexp.MustCompile("([A-Za-z][A-Za-z0-9]*)ID")
 )
 
 func parseAttr(attr string) map[string]string {

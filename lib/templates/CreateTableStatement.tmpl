@@ -1,0 +1,5 @@
+CREATE TABLE {{lower .Name}} ({{$n := len .Columns}}{{range $i, $c := .Columns}}
+    {{$c.String}}{{if lt (plus1 $i) $n}}, {{end}}
+{{end}}){{$p := len .PrimaryKeys}}{{if $p}} PRIMARY KEY (
+    {{range $j, $k := .PrimaryKeys}}{{lower $k.Name}}{{if lt (plus1 $j) $p}}, {{end}}
+{{end}}){{end}};
