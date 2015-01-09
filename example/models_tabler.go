@@ -19,7 +19,7 @@ func (u User) InsertRow(id string, email string, created time.Time) error {
 }
 
 func (u User) SelectRow() string {
-    return `SELECT id, email, created FROM user WHERE id=?;`
+    return `SELECT * FROM user WHERE id=?;`
 }
 
 // Profile
@@ -37,7 +37,7 @@ func (p Profile) InsertRow() string {
 }
 
 func (p Profile) SelectRow() string {
-    return `SELECT userid, attribute, value FROM profile WHERE userid=? AND attribute=?;`
+    return `SELECT * FROM profile WHERE userid=? AND attribute=?;`
 }
 
 // NoPrimary
@@ -55,5 +55,5 @@ func (n NoPrimary) InsertRow() string {
 }
 
 func (n NoPrimary) SelectRow() string {
-    return `SELECT attribute, value FROM noprimary WHERE ;`
+    return `SELECT * FROM noprimary;`
 }
