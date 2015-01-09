@@ -1,8 +1,6 @@
-package main
+package lib
 
 import (
-	"log"
-	"os"
 	"regexp"
 	"strings"
 	"text/template"
@@ -19,15 +17,4 @@ var (
 
 func newTmpl(s string) *template.Template {
 	return template.Must(template.New("T").Funcs(filters).Parse(s))
-}
-
-func main() {
-	for _, path := range os.Args[1:] {
-		infile := InputFile{}
-		if err := infile.Init(path); err != nil {
-			log.Printf("%v", err)
-			continue
-		}
-		infile.Write()
-	}
 }
