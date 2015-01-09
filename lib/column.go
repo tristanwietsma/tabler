@@ -44,7 +44,7 @@ func (c *Column) init(name, ftype, tag string) error {
 
 func (c Column) String() string {
 	buf := bytes.Buffer{}
-	tmpl := newTmpl(`{{lower .Name}} {{.Type}}{{if .IsForeign}} {{.ForeignKey}}{{end}}`)
+	tmpl := templify(`{{lower .Name}} {{.Type}}{{if .IsForeign}} {{.ForeignKey}}{{end}}`)
 	tmpl.Execute(&buf, c)
 	return buf.String()
 }

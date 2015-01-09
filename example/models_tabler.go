@@ -4,7 +4,7 @@ package models
 // User
 
 func (u User) CreateTable() error {
-    _, err := u.db.Exec(`CREATE TABLE user (id uuid, email varchar(128), created timestamp) PRIMARY KEY (id);`)
+    _, err := u.db.Exec("CREATE TABLE user (id uuid, email varchar(128), created timestamp) PRIMARY KEY (id);")
     return err
 }
 
@@ -25,7 +25,7 @@ func (u User) SelectRow() string {
 // Profile
 
 func (p Profile) CreateTable() string {
-    return `CREATE TABLE profile (userid uuid REFERENCES user(id), attribute varchar(64), value varchar(256)) PRIMARY KEY (userid, attribute);`
+    return "CREATE TABLE profile (userid uuid REFERENCES user(id), attribute varchar(64), value varchar(256)) PRIMARY KEY (userid, attribute);"
 }
 
 func (p Profile) DropTable() string {
@@ -43,7 +43,7 @@ func (p Profile) SelectRow() string {
 // NoPrimary
 
 func (n NoPrimary) CreateTable() string {
-    return `CREATE TABLE noprimary (attribute varchar(64), value varchar(256));`
+    return "CREATE TABLE noprimary (attribute varchar(64), value varchar(256));"
 }
 
 func (n NoPrimary) DropTable() string {

@@ -1,10 +1,7 @@
 package lib
 
-import (
-	"bytes"
-	"text/template"
-)
+import "text/template"
 
-func newTmpl(s string) *template.Template {
+func templify(s string) *template.Template {
 	return template.Must(template.New("T").Funcs(filters).Parse(s))
 }
