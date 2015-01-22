@@ -12,7 +12,7 @@ I have not put together a formal design doc, but some enhancements on the docket
 - Move templates out of source. *Templates may go away entirely.*
 - For structs with a database connection reference (either `*sql.DB` or the very convenient [`*sqlx.DB`](https://github.com/jmoiron/sqlx)), `tabler` is going to implement ORM-like functionality. Lots of potential there, from robust queries to test fixtures.
 
-For those looking for a `go generate` example in order to start hacking together their own utilities, take a look at [commit 698eca6ad6](https://github.com/tristanwietsma/tabler/tree/698eca6ad6d7773ccbaebcffaf45ef8629d47019).
+For those looking for a `go generate` example in order to start hacking together their own utilities, take a look at [commit 698eca6ad6](https://github.com/GolangDorks/tabler/tree/698eca6ad6d7773ccbaebcffaf45ef8629d47019).
 
 ## Introduction
 
@@ -22,12 +22,12 @@ Given a struct with tagged fields, `tabler` will generate methods that return st
 - Insert Row
 - Select Row
 
-See the [example](https://github.com/tristanwietsma/tabler/tree/master/example) for more information.
+See the [example](https://github.com/GolangDorks/tabler/tree/master/example) for more information.
 
 ## Installation
 
 ```bash
-go get github.com/tristanwietsma/tabler
+go get github.com/GolangDorks/tabler
 ```
 
 ## Use
