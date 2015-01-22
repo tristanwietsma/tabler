@@ -3,26 +3,29 @@ package models
 
 // User
 
-func (u User) CreateTable() string {
-    return `CREATE TABLE user (id uuid, email varchar(128), created timestamp) PRIMARY KEY (id);`
+func (u User) CreateTable() error {
+    _, err := u.db.Exec("CREATE TABLE user (id uuid, email varchar(128), created timestamp) PRIMARY KEY (id);")
+    return err
 }
 
-func (u User) DropTable() string {
-    return `DROP TABLE user;`
+func (u User) DropTable() error {
+    _, err := u.db.Exec(`DROP TABLE user;`)
+    return err
 }
 
-func (u User) InsertRow() string {
-    return `INSERT INTO user (id, email, created) VALUES (?, ?, ?);`
+func (u User) InsertRow(id string, email string, created time.Time) error {
+    _, err := u.db.Exec(`INSERT INTO user (id, email, created) VALUES (?, ?, ?);`, id, email, created)
+    return err
 }
 
 func (u User) SelectRow() string {
-    return `SELECT id, email, created FROM user WHERE id=?;`
+    return `SELECT * FROM user WHERE id=?;`
 }
 
 // Profile
 
 func (p Profile) CreateTable() string {
-    return `CREATE TABLE profile (userid uuid REFERENCES user(id), attribute varchar(64), value varchar(256)) PRIMARY KEY (userid, attribute);`
+    return "CREATE TABLE profile (userid uuid REFERENCES user(id), attribute varchar(64), value varchar(256)) PRIMARY KEY (userid, attribute);"
 }
 
 func (p Profile) DropTable() string {
@@ -34,5 +37,23 @@ func (p Profile) InsertRow() string {
 }
 
 func (p Profile) SelectRow() string {
-    return `SELECT userid, attribute, value FROM profile WHERE userid=? AND attribute=?;`
+    return `SELECT * FROM profile WHERE userid=? AND attribute=?;`
+}
+
+// NoPrimary
+
+func (n NoPrimary) CreateTable() string {
+    return "CREATE TABLE noprimary (attribute varchar(64), value varchar(256));"
+}
+
+func (n NoPrimary) DropTable() string {
+    return `DROP TABLE noprimary;`
+}
+
+func (n NoPrimary) InsertRow() string {
+    return `INSERT INTO noprimary (attribute, value) VALUES (?, ?);`
+}
+
+func (n NoPrimary) SelectRow() string {
+    return `SELECT * FROM noprimary;`
 }
