@@ -10,12 +10,12 @@ Given a struct with tagged fields, `tabler` will generate methods that return st
 - Insert Row
 - Select Row
 
-See the [example](https://github.com/GolangDorks/tabler/tree/master/example) for more information.
+See the [example](https://github.com/tristanwietsma/tabler/tree/master/example) for more information.
 
 ## Installation
 
 ```bash
-go get github.com/GolangDorks/tabler
+go get github.com/tristanwietsma/tabler
 ```
 
 ## Use
